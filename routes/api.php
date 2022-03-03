@@ -1,19 +1,20 @@
 <?php
 
+use App\Http\Controllers\Poster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+// Для простоты можно было бы так, но по ТЗ надо делать защиту на nginx, а вешать ограничения на HTTP методы сложнее
+// Route::resource('poster', Poster::class);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('poster')->group(function () {
+    Route::get('/', [Poster::class, 'index'])
+        ->name('posterIndex');
+
+    Route::get('/create', [Poster::class, 'create'])
+        ->name('posterCreate');
+
+    Route::get('/delete/{id}', [Poster::class, 'delete'])
+        ->where('id', '[0-9]+')
+        ->name('posterDelete');
 });
